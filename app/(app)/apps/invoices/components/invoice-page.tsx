@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { formatCurrency } from "@/lib/utils"
 import { Currency } from "@/prisma/client"
 import { X } from "lucide-react"
-import { InputHTMLAttributes, memo, useCallback, useMemo } from "react"
+import { InputHTMLAttributes, memo, useCallback, useMemo, Dispatch } from "react"
 
 export interface InvoiceItem {
   name: string
@@ -55,7 +55,7 @@ export interface InvoiceFormData {
 
 interface InvoicePageProps {
   invoiceData: InvoiceFormData
-  dispatch: React.Dispatch<unknown>
+  dispatch: Dispatch<any>
   currencies: Currency[]
 }
 
