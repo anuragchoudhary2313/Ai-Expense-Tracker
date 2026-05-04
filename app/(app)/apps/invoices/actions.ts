@@ -30,7 +30,7 @@ import { InvoiceAppData } from "./page"
 
 export async function generateInvoicePDF(data: InvoiceFormData): Promise<Uint8Array> {
   const pdfElement = createElement(InvoicePDF, { data })
-  const buffer = await renderToBuffer(pdfElement as ReactElement)
+  const buffer = await renderToBuffer(pdfElement as any)
   return new Uint8Array(buffer)
 }
 
