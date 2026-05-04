@@ -6,7 +6,7 @@ import config from "./config"
 
 let resendClient: Resend | null = null
 
-function getResendClient() {
+export function getResendClient() {
   if (resendClient) {
     return resendClient
   }

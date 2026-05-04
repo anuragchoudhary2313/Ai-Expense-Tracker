@@ -1,7 +1,7 @@
 "use server"
 
 import config from "@/lib/config"
-import { resend, sendNewsletterWelcomeEmail } from "@/lib/email"
+import { getResendClient, sendNewsletterWelcomeEmail } from "@/lib/email"
 
 export async function subscribeToNewsletterAction(email: string) {
   try {
@@ -9,6 +9,7 @@ export async function subscribeToNewsletterAction(email: string) {
       return { success: false, error: "Invalid email address" }
     }
 
+    const resend = getResendClient()
     const existingContacts = await resend.contacts.list({
       audienceId: config.email.audienceId,
     })
