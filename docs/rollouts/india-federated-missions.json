@@ -1,0 +1,1560 @@
+[
+  {
+    "mission_id": "M001",
+    "title": "Canary ui_rebrand mission 001",
+    "stream": "ui_rebrand",
+    "wave": "canary",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M002",
+    "title": "Canary categories mission 002",
+    "stream": "categories",
+    "wave": "canary",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M001"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M003",
+    "title": "Canary gst mission 003",
+    "stream": "gst",
+    "wave": "canary",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M002"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M004",
+    "title": "Canary inr_upi mission 004",
+    "stream": "inr_upi",
+    "wave": "canary",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M003"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M005",
+    "title": "Canary sample_data mission 005",
+    "stream": "sample_data",
+    "wave": "canary",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M004"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M006",
+    "title": "Canary dashboard mission 006",
+    "stream": "dashboard",
+    "wave": "canary",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M005"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M007",
+    "title": "Canary monthly_summary mission 007",
+    "stream": "monthly_summary",
+    "wave": "canary",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M006"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M008",
+    "title": "Canary ai_insights mission 008",
+    "stream": "ai_insights",
+    "wave": "canary",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M007"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M009",
+    "title": "Canary backend_api mission 009",
+    "stream": "backend_api",
+    "wave": "canary",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M008"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M010",
+    "title": "Canary schema_migration mission 010",
+    "stream": "schema_migration",
+    "wave": "canary",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M009"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M011",
+    "title": "Canary tests mission 011",
+    "stream": "tests",
+    "wave": "canary",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M010"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M012",
+    "title": "Canary docs mission 012",
+    "stream": "docs",
+    "wave": "canary",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M011"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M013",
+    "title": "Partial release_hardening mission 013",
+    "stream": "release_hardening",
+    "wave": "partial",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M012"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M014",
+    "title": "Partial ui_rebrand mission 014",
+    "stream": "ui_rebrand",
+    "wave": "partial",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M013"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M015",
+    "title": "Partial categories mission 015",
+    "stream": "categories",
+    "wave": "partial",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M014"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M016",
+    "title": "Partial gst mission 016",
+    "stream": "gst",
+    "wave": "partial",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M015"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M017",
+    "title": "Partial inr_upi mission 017",
+    "stream": "inr_upi",
+    "wave": "partial",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M016"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M018",
+    "title": "Partial sample_data mission 018",
+    "stream": "sample_data",
+    "wave": "partial",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M017"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M019",
+    "title": "Partial dashboard mission 019",
+    "stream": "dashboard",
+    "wave": "partial",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M018"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M020",
+    "title": "Partial monthly_summary mission 020",
+    "stream": "monthly_summary",
+    "wave": "partial",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M019"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M021",
+    "title": "Partial ai_insights mission 021",
+    "stream": "ai_insights",
+    "wave": "partial",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M020"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M022",
+    "title": "Partial backend_api mission 022",
+    "stream": "backend_api",
+    "wave": "partial",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M021"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M023",
+    "title": "Partial schema_migration mission 023",
+    "stream": "schema_migration",
+    "wave": "partial",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M022"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M024",
+    "title": "Partial tests mission 024",
+    "stream": "tests",
+    "wave": "partial",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M023"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M025",
+    "title": "Partial docs mission 025",
+    "stream": "docs",
+    "wave": "partial",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M024"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M026",
+    "title": "Partial release_hardening mission 026",
+    "stream": "release_hardening",
+    "wave": "partial",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M025"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M027",
+    "title": "Partial ui_rebrand mission 027",
+    "stream": "ui_rebrand",
+    "wave": "partial",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M026"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M028",
+    "title": "Partial categories mission 028",
+    "stream": "categories",
+    "wave": "partial",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M027"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M029",
+    "title": "Partial gst mission 029",
+    "stream": "gst",
+    "wave": "partial",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M028"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M030",
+    "title": "Partial inr_upi mission 030",
+    "stream": "inr_upi",
+    "wave": "partial",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M029"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M031",
+    "title": "Partial sample_data mission 031",
+    "stream": "sample_data",
+    "wave": "partial",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M030"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M032",
+    "title": "Partial dashboard mission 032",
+    "stream": "dashboard",
+    "wave": "partial",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M031"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M033",
+    "title": "Partial monthly_summary mission 033",
+    "stream": "monthly_summary",
+    "wave": "partial",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M032"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M034",
+    "title": "Partial ai_insights mission 034",
+    "stream": "ai_insights",
+    "wave": "partial",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M033"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M035",
+    "title": "Partial backend_api mission 035",
+    "stream": "backend_api",
+    "wave": "partial",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M034"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M036",
+    "title": "Partial schema_migration mission 036",
+    "stream": "schema_migration",
+    "wave": "partial",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M035"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M037",
+    "title": "Partial tests mission 037",
+    "stream": "tests",
+    "wave": "partial",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M036"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M038",
+    "title": "Partial docs mission 038",
+    "stream": "docs",
+    "wave": "partial",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M037"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M039",
+    "title": "Partial release_hardening mission 039",
+    "stream": "release_hardening",
+    "wave": "partial",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M038"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M040",
+    "title": "Partial ui_rebrand mission 040",
+    "stream": "ui_rebrand",
+    "wave": "partial",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M039"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M041",
+    "title": "Partial categories mission 041",
+    "stream": "categories",
+    "wave": "partial",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M040"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M042",
+    "title": "Partial gst mission 042",
+    "stream": "gst",
+    "wave": "partial",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M041"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M043",
+    "title": "Partial inr_upi mission 043",
+    "stream": "inr_upi",
+    "wave": "partial",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M042"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M044",
+    "title": "Partial sample_data mission 044",
+    "stream": "sample_data",
+    "wave": "partial",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M043"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M045",
+    "title": "Partial dashboard mission 045",
+    "stream": "dashboard",
+    "wave": "partial",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M044"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M046",
+    "title": "Partial monthly_summary mission 046",
+    "stream": "monthly_summary",
+    "wave": "partial",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M045"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M047",
+    "title": "Partial ai_insights mission 047",
+    "stream": "ai_insights",
+    "wave": "partial",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M046"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M048",
+    "title": "Partial backend_api mission 048",
+    "stream": "backend_api",
+    "wave": "partial",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M047"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M049",
+    "title": "Partial schema_migration mission 049",
+    "stream": "schema_migration",
+    "wave": "partial",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M048"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M050",
+    "title": "Partial tests mission 050",
+    "stream": "tests",
+    "wave": "partial",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M049"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M051",
+    "title": "Partial docs mission 051",
+    "stream": "docs",
+    "wave": "partial",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M050"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M052",
+    "title": "Partial release_hardening mission 052",
+    "stream": "release_hardening",
+    "wave": "partial",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M051"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M053",
+    "title": "Partial ui_rebrand mission 053",
+    "stream": "ui_rebrand",
+    "wave": "partial",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M052"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M054",
+    "title": "Partial categories mission 054",
+    "stream": "categories",
+    "wave": "partial",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M053"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M055",
+    "title": "Partial gst mission 055",
+    "stream": "gst",
+    "wave": "partial",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M054"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M056",
+    "title": "Partial inr_upi mission 056",
+    "stream": "inr_upi",
+    "wave": "partial",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M055"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M057",
+    "title": "Partial sample_data mission 057",
+    "stream": "sample_data",
+    "wave": "partial",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M056"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M058",
+    "title": "Partial dashboard mission 058",
+    "stream": "dashboard",
+    "wave": "partial",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M057"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M059",
+    "title": "Partial monthly_summary mission 059",
+    "stream": "monthly_summary",
+    "wave": "partial",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M058"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M060",
+    "title": "Partial ai_insights mission 060",
+    "stream": "ai_insights",
+    "wave": "partial",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M059"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M061",
+    "title": "Full backend_api mission 061",
+    "stream": "backend_api",
+    "wave": "full",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M060"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M062",
+    "title": "Full schema_migration mission 062",
+    "stream": "schema_migration",
+    "wave": "full",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M061"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M063",
+    "title": "Full tests mission 063",
+    "stream": "tests",
+    "wave": "full",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M062"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M064",
+    "title": "Full docs mission 064",
+    "stream": "docs",
+    "wave": "full",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M063"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M065",
+    "title": "Full release_hardening mission 065",
+    "stream": "release_hardening",
+    "wave": "full",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M064"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M066",
+    "title": "Full ui_rebrand mission 066",
+    "stream": "ui_rebrand",
+    "wave": "full",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M065"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M067",
+    "title": "Full categories mission 067",
+    "stream": "categories",
+    "wave": "full",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M066"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M068",
+    "title": "Full gst mission 068",
+    "stream": "gst",
+    "wave": "full",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M067"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M069",
+    "title": "Full inr_upi mission 069",
+    "stream": "inr_upi",
+    "wave": "full",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M068"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M070",
+    "title": "Full sample_data mission 070",
+    "stream": "sample_data",
+    "wave": "full",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M069"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M071",
+    "title": "Full dashboard mission 071",
+    "stream": "dashboard",
+    "wave": "full",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M070"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M072",
+    "title": "Full monthly_summary mission 072",
+    "stream": "monthly_summary",
+    "wave": "full",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M071"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M073",
+    "title": "Full ai_insights mission 073",
+    "stream": "ai_insights",
+    "wave": "full",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M072"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M074",
+    "title": "Full backend_api mission 074",
+    "stream": "backend_api",
+    "wave": "full",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M073"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M075",
+    "title": "Full schema_migration mission 075",
+    "stream": "schema_migration",
+    "wave": "full",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M074"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M076",
+    "title": "Full tests mission 076",
+    "stream": "tests",
+    "wave": "full",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M075"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M077",
+    "title": "Full docs mission 077",
+    "stream": "docs",
+    "wave": "full",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M076"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M078",
+    "title": "Full release_hardening mission 078",
+    "stream": "release_hardening",
+    "wave": "full",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M077"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M079",
+    "title": "Full ui_rebrand mission 079",
+    "stream": "ui_rebrand",
+    "wave": "full",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M078"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M080",
+    "title": "Full categories mission 080",
+    "stream": "categories",
+    "wave": "full",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M079"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M081",
+    "title": "Full gst mission 081",
+    "stream": "gst",
+    "wave": "full",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M080"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M082",
+    "title": "Full inr_upi mission 082",
+    "stream": "inr_upi",
+    "wave": "full",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M081"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M083",
+    "title": "Full sample_data mission 083",
+    "stream": "sample_data",
+    "wave": "full",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M082"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M084",
+    "title": "Full dashboard mission 084",
+    "stream": "dashboard",
+    "wave": "full",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M083"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M085",
+    "title": "Full monthly_summary mission 085",
+    "stream": "monthly_summary",
+    "wave": "full",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M084"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M086",
+    "title": "Full ai_insights mission 086",
+    "stream": "ai_insights",
+    "wave": "full",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M085"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M087",
+    "title": "Full backend_api mission 087",
+    "stream": "backend_api",
+    "wave": "full",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M086"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M088",
+    "title": "Full schema_migration mission 088",
+    "stream": "schema_migration",
+    "wave": "full",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M087"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M089",
+    "title": "Full tests mission 089",
+    "stream": "tests",
+    "wave": "full",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M088"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M090",
+    "title": "Full docs mission 090",
+    "stream": "docs",
+    "wave": "full",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M089"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M091",
+    "title": "Full release_hardening mission 091",
+    "stream": "release_hardening",
+    "wave": "full",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M090"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M092",
+    "title": "Full ui_rebrand mission 092",
+    "stream": "ui_rebrand",
+    "wave": "full",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M091"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M093",
+    "title": "Full categories mission 093",
+    "stream": "categories",
+    "wave": "full",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M092"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M094",
+    "title": "Full gst mission 094",
+    "stream": "gst",
+    "wave": "full",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M093"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M095",
+    "title": "Full inr_upi mission 095",
+    "stream": "inr_upi",
+    "wave": "full",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M094"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M096",
+    "title": "Full sample_data mission 096",
+    "stream": "sample_data",
+    "wave": "full",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M095"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M097",
+    "title": "Full dashboard mission 097",
+    "stream": "dashboard",
+    "wave": "full",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M096"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M098",
+    "title": "Full monthly_summary mission 098",
+    "stream": "monthly_summary",
+    "wave": "full",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M097"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M099",
+    "title": "Full ai_insights mission 099",
+    "stream": "ai_insights",
+    "wave": "full",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M098"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M100",
+    "title": "Full backend_api mission 100",
+    "stream": "backend_api",
+    "wave": "full",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M099"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M101",
+    "title": "Full schema_migration mission 101",
+    "stream": "schema_migration",
+    "wave": "full",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M100"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M102",
+    "title": "Full tests mission 102",
+    "stream": "tests",
+    "wave": "full",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M101"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M103",
+    "title": "Full docs mission 103",
+    "stream": "docs",
+    "wave": "full",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M102"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M104",
+    "title": "Full release_hardening mission 104",
+    "stream": "release_hardening",
+    "wave": "full",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M103"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M105",
+    "title": "Full ui_rebrand mission 105",
+    "stream": "ui_rebrand",
+    "wave": "full",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M104"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M106",
+    "title": "Full categories mission 106",
+    "stream": "categories",
+    "wave": "full",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M105"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M107",
+    "title": "Full gst mission 107",
+    "stream": "gst",
+    "wave": "full",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M106"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  },
+  {
+    "mission_id": "M108",
+    "title": "Full inr_upi mission 108",
+    "stream": "inr_upi",
+    "wave": "full",
+    "objective": "Enable INR defaults, lakh-crore formatting, and UPI payment metadata.",
+    "depends_on": [
+      "M107"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Amounts display in INR format and UPI transactions save required fields.",
+    "rollback_scope": "Switch locale configuration back and hide UPI-specific fields."
+  },
+  {
+    "mission_id": "M109",
+    "title": "Full sample_data mission 109",
+    "stream": "sample_data",
+    "wave": "full",
+    "objective": "Generate India-centric sample transactions across cash, card, and UPI.",
+    "depends_on": [
+      "M108"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Seed jobs load deterministic sample data without duplicate rows.",
+    "rollback_scope": "Remove new sample rows and reload the previous global dataset."
+  },
+  {
+    "mission_id": "M110",
+    "title": "Full dashboard mission 110",
+    "stream": "dashboard",
+    "wave": "full",
+    "objective": "Update dashboard widgets to highlight India rollout KPIs and totals.",
+    "depends_on": [
+      "M109"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Dashboard cards and charts show correct totals for seeded scenarios.",
+    "rollback_scope": "Re-enable legacy dashboard widget configuration."
+  },
+  {
+    "mission_id": "M111",
+    "title": "Full monthly_summary mission 111",
+    "stream": "monthly_summary",
+    "wave": "full",
+    "objective": "Revise monthly summary sections for Indian tax and spending patterns.",
+    "depends_on": [
+      "M110"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Monthly summaries render new sections and totals match ledger data.",
+    "rollback_scope": "Fallback to the legacy summary template and section order."
+  },
+  {
+    "mission_id": "M112",
+    "title": "Full ai_insights mission 112",
+    "stream": "ai_insights",
+    "wave": "full",
+    "objective": "Tune AI insight prompts for Indian spending behavior and compliance cues.",
+    "depends_on": [
+      "M111"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "Generated insights reflect localized trends without policy violations.",
+    "rollback_scope": "Point the insights service back to the previous prompt version."
+  },
+  {
+    "mission_id": "M113",
+    "title": "Full backend_api mission 113",
+    "stream": "backend_api",
+    "wave": "full",
+    "objective": "Extend API contracts to expose India rollout fields and filters.",
+    "depends_on": [
+      "M112"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Updated endpoints pass contract tests and stay backward compatible.",
+    "rollback_scope": "Redeploy the previous API version and disable new fields."
+  },
+  {
+    "mission_id": "M114",
+    "title": "Full schema_migration mission 114",
+    "stream": "schema_migration",
+    "wave": "full",
+    "objective": "Apply schema changes for localization, GST, and UPI attributes.",
+    "depends_on": [
+      "M113"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Migration runs forward and backward cleanly in staging.",
+    "rollback_scope": "Run down migrations and restore the pre-rollout schema snapshot."
+  },
+  {
+    "mission_id": "M115",
+    "title": "Full tests mission 115",
+    "stream": "tests",
+    "wave": "full",
+    "objective": "Add automated coverage for localization, tax, and payment flows.",
+    "depends_on": [
+      "M114"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Target suites pass with no increase in flaky failures.",
+    "rollback_scope": "Remove new test gates and restore the prior CI matrix."
+  },
+  {
+    "mission_id": "M116",
+    "title": "Full docs mission 116",
+    "stream": "docs",
+    "wave": "full",
+    "objective": "Document rollout behavior, runbooks, and user-facing changes.",
+    "depends_on": [
+      "M115"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Documentation publishes successfully with setup, usage, and limits.",
+    "rollback_scope": "Revert docs to the last stable version and republish."
+  },
+  {
+    "mission_id": "M117",
+    "title": "Full release_hardening mission 117",
+    "stream": "release_hardening",
+    "wave": "full",
+    "objective": "Harden rollout controls, monitoring, and kill-switch procedures.",
+    "depends_on": [
+      "M116"
+    ],
+    "trust_zone": "privileged",
+    "acceptance_criteria": "Rollback drills validate alarms, hooks, and SLO dashboards.",
+    "rollback_scope": "Activate release freeze and execute the standard rollback runbook."
+  },
+  {
+    "mission_id": "M118",
+    "title": "Full ui_rebrand mission 118",
+    "stream": "ui_rebrand",
+    "wave": "full",
+    "objective": "Refresh the UI with India-first typography, labels, and iconography.",
+    "depends_on": [
+      "M117"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Core screens render the new theme with no visual regressions in smoke checks.",
+    "rollback_scope": "Revert theme tokens and restore the previous asset bundle."
+  },
+  {
+    "mission_id": "M119",
+    "title": "Full categories mission 119",
+    "stream": "categories",
+    "wave": "full",
+    "objective": "Add spending categories aligned to Indian household and SME workflows.",
+    "depends_on": [
+      "M118"
+    ],
+    "trust_zone": "internal",
+    "acceptance_criteria": "Users can select new categories and legacy mappings remain intact.",
+    "rollback_scope": "Restore the previous category seed and mapping table."
+  },
+  {
+    "mission_id": "M120",
+    "title": "Full gst mission 120",
+    "stream": "gst",
+    "wave": "full",
+    "objective": "Implement GST-aware tax fields and rate handling for expense entries.",
+    "depends_on": [
+      "M119"
+    ],
+    "trust_zone": "restricted",
+    "acceptance_criteria": "GST amount and effective rate calculate correctly for standard invoice cases.",
+    "rollback_scope": "Disable GST computation and revert tax parser changes."
+  }
+]
