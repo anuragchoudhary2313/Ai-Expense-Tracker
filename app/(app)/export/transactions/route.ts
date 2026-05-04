@@ -12,6 +12,9 @@ import JSZip from "jszip"
 import { NextResponse } from "next/server"
 import path from "path"
 
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
+
 const TRANSACTIONS_CHUNK_SIZE = 300
 const FILES_CHUNK_SIZE = 50
 const PROGRESS_UPDATE_INTERVAL_MS = 2000 // 2 seconds
