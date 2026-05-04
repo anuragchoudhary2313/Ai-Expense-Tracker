@@ -498,12 +498,6 @@ npm run start
 
 No AI-slop PRs. Please open a new Issue and discuss the details with maintainers before sending new changes.
 
-## ❤️ Support the Project
-
-If TaxHacker has helped you save time or manage your finances better, consider supporting its development! Your donations help us maintain the project, add new features, and keep it free and open source. Every contribution helps ensure we can keep improving and maintaining this tool for the community: <https://vas3k.com/donate/>
-
-[![Thank the TaxHacker devs](https://img.shields.io/badge/❤️-donate%20to%20Taxhacker%20devs-f08080?labelColor=black&style=for-the-badge)](https://vas3k.com/donate/)
-
 ## 📄 License
 
 TaxHacker is licensed under the [MIT License](LICENSE).
