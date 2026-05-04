@@ -68,8 +68,15 @@ export async function GET(request: Request) {
     csvStream.end()
 
     if (!includeAttachments) {
-      const stream = Readable.from(csvStream)
-      return new NextResponse(stream as any, {
+      const csvContent = await new Promise<string>((resolve) => {
+        let content = ""
+        csvStream.on("data", (chunk) => {
+          content += chunk
+        })
+        csvStream.on("end", () => resolve(content))
+      })
+
+      return new NextResponse(csvContent, {
         headers: {
           "Content-Type": "text/csv",
           "Content-Disposition": `attachment; filename="transactions.csv"`,
