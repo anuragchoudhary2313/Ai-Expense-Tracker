@@ -22,7 +22,6 @@ import { mkdir, writeFile } from "fs/promises"
 import { revalidatePath } from "next/cache"
 import path from "path"
 import { createElement } from "react"
-import type { ReactElement } from "react"
 import { InvoiceFormData } from "./components/invoice-page"
 import { InvoicePDF } from "./components/invoice-pdf"
 import { InvoiceTemplate } from "./default-templates"
@@ -30,7 +29,7 @@ import { InvoiceAppData } from "./page"
 
 export async function generateInvoicePDF(data: InvoiceFormData): Promise<Uint8Array> {
   const pdfElement = createElement(InvoicePDF, { data })
-  const buffer = await renderToBuffer(pdfElement as any)
+  const buffer = await renderToBuffer(pdfElement as Parameters<typeof renderToBuffer>[0])
   return new Uint8Array(buffer)
 }
 

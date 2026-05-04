@@ -11,7 +11,6 @@ import fs from "fs/promises"
 import JSZip from "jszip"
 import { NextResponse } from "next/server"
 import path from "path"
-import { Readable } from "stream"
 
 const TRANSACTIONS_CHUNK_SIZE = 300
 const FILES_CHUNK_SIZE = 50

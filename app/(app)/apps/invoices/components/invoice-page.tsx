@@ -55,9 +55,21 @@ export interface InvoiceFormData {
 
 interface InvoicePageProps {
   invoiceData: InvoiceFormData
-  dispatch: Dispatch<any>
+  dispatch: Dispatch<InvoiceDispatchAction>
   currencies: Currency[]
 }
+
+type InvoiceDispatchAction =
+  | { type: "UPDATE_FIELD"; field: string; value: unknown }
+  | { type: "ADD_ITEM" }
+  | { type: "UPDATE_ITEM"; index: number; field: string; value: unknown }
+  | { type: "REMOVE_ITEM"; index: number }
+  | { type: "ADD_TAX" }
+  | { type: "UPDATE_TAX"; index: number; field: string; value: unknown }
+  | { type: "REMOVE_TAX"; index: number }
+  | { type: "ADD_FEE" }
+  | { type: "UPDATE_FEE"; index: number; field: string; value: unknown }
+  | { type: "REMOVE_FEE"; index: number }
 
 // Memoized row for invoice items
 const ItemRow = memo(function ItemRow({
