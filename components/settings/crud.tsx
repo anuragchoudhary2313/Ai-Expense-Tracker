@@ -31,6 +31,11 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
   // The optimistic updater is not used in this component; only the optimistic state is needed.
   const [optimisticItems] = useOptimistic(items, (state, newItem: T) => [...state, newItem])
 
+  const getItemId = (item: T): string | null => {
+    const id = (item as any).code ?? (item as any).id
+    return id != null ? String(id) : null
+  }
+
   const FormCell = (item: T, column: CrudColumn<T>) => {
     if (column.type === "checkbox") {
       return item[column.key] ? <Check /> : ""
@@ -44,7 +49,7 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
         </div>
       )
     }
-    return item[column.key]
+    return String(item[column.key] ?? "")
   }
 
   const EditFormCell = (item: T, column: CrudColumn<T>) => {
@@ -248,7 +253,8 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
   }
 
   const startEditing = (item: T) => {
-    setEditingId(item.code || item.id)
+    const id = getItemId(item)
+    setEditingId(id)
     setEditingItem(item)
   }
 
@@ -279,16 +285,23 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
             <TableRow key={index}>
               {columns.map((column) => (
                 <TableCell key={String(column.key)} className="first:font-semibold">
-                  {editingId === (item.code || item.id) && column.editable
+                  {editingId === getItemId(item) && column.editable
                     ? EditFormCell(item, column)
                     : FormCell(item, column)}
                 </TableCell>
               ))}
               <TableCell>
                 <div className="flex gap-2">
-                  {editingId === (item.code || item.id) ? (
+                  {editingId === getItemId(item) ? (
                     <>
-                      <Button size="sm" onClick={() => handleEdit(item.code || item.id)} aria-label="Save changes">
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          const id = getItemId(item)
+                          if (id) handleEdit(id)
+                        }}
+                        aria-label="Save changes"
+                      >
                         Save
                       </Button>
                       <Button size="sm" variant="outline" onClick={() => setEditingId(null)} aria-label="Cancel editing">
@@ -305,17 +318,20 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
                             startEditing(item)
                             setIsAdding(false)
                           }}
-                          aria-label={`Edit ${String(item.name || item.code || 'item')}`}
+                          aria-label={`Edit ${String((item as any).name ?? (item as any).code ?? 'item')}`}
                         >
                           <Edit />
                         </Button>
                       )}
-                      {item.isDeletable && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          onClick={() => handleDelete(item.code || item.id)}
-                          aria-label={`Delete ${String(item.name || item.code || 'item')}`}
+                      {Boolean((item as any).isDeletable) && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            const id = getItemId(item)
+                            if (id) handleDelete(id)
+                          }}
+                          aria-label={`Delete ${String((item as any).name ?? (item as any).code ?? 'item')}`}
                         >
                           <Trash2 />
                         </Button>
