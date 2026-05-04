@@ -52,7 +52,7 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
       return (
         <input
           type="checkbox"
-          checked={editingItem[column.key]}
+          checked={Boolean(editingItem[column.key])}
           aria-label={String(column.label)}
           onChange={(e) =>
             setEditingItem({
@@ -65,7 +65,7 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
     } else if (column.type === "select") {
       return (
         <select
-          value={editingItem[column.key]}
+          value={String(editingItem[column.key] ?? column.defaultValue ?? "")}
           className="p-2 rounded-md border bg-transparent"
           aria-label={String(column.label)}
           onChange={(e) =>
@@ -121,7 +121,7 @@ export function CrudTable<T extends Record<string, unknown>>({ items, columns, o
     return (
       <Input
         type="text"
-        value={editingItem[column.key] || ""}
+        value={String(editingItem[column.key] ?? "")}
         aria-label={String(column.label)}
         onChange={(e) =>
           setEditingItem({
